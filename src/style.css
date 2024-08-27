@@ -1,0 +1,114 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  height: 100vh;
+  font-family: "Lato", sans-serif;
+  overflow: hidden;
+}
+#sidebar {
+  width: 250px;
+  background-color: #444;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+#main-pane {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100vh;
+}
+#map {
+  position: relative;
+}
+#map img {
+  object-fit: contain;
+  max-height: 100vh;
+}
+.marker {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-size: cover;
+  transform: translate(-50%, -50%);
+}
+.marker.cs {
+  background-image: url("img/cs.png");
+}
+.marker.fasttravel {
+  background-image: url("img/fasttravel.png");
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.filter-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1e90ff; /* Custom color for the checkbox */
+  margin-right: 10px;
+  cursor: pointer;
+  transform: scale(1.2); /* Makes the checkbox larger */
+}
+
+.filter-item input[type="checkbox"]::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1e90ff; /* Border color of the checkbox */
+  border-radius: 4px;
+  background-color: #333; /* Background color of the checkbox when not checked */
+  position: relative;
+  top: -1px;
+  left: -1px;
+}
+
+.filter-item input[type="checkbox"]:checked::before {
+  background-color: #1e90ff; /* Background color of the checkbox when checked */
+}
+
+.filter-item input[type="checkbox"]:checked::after {
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff; /* Checkmark color */
+  font-size: 16px;
+}
+
+.filter-item label {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.filter-item img {
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+}
+
+#sidebar-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(32, 32, 32);
+  padding: 3px;
+  text-align: center;
+  box-sizing: content-box;
+  height: 1em;
+}
