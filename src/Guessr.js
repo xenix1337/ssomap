@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { photos, getRandomPhotos } from "./data/guessr";
+import { getRandomPhotos } from "./data/guessr";
 
 import Map from "./components/Map";
 
@@ -71,7 +71,7 @@ function Guessr() {
 
         <button
           class="guess-button"
-          disabled={guessMarker === null}
+          disabled={guessMarker === null && gameState !== "finished"}
           onClick={() => {
             if (gameState === "guessing") {
               addPoints();
@@ -84,7 +84,7 @@ function Guessr() {
                   },
                 ])
               );
-            } else {
+            } else if (gameState === "reviewing") {
               setGameState("guessing");
               setMarkers([]);
               setGuessMarker(null);
@@ -93,10 +93,23 @@ function Guessr() {
               } else {
                 setGameState("finished");
               }
+            } else if (gameState === "finished") {
+              setPhotos(getRandomPhotos(roundCount));
+              setGameState("guessing");
+              setMarkers([]);
+              setGuessMarker(null);
+              setPhotoId(0);
+              setPoints(0);
             }
           }}
         >
-          {gameState === "guessing" ? "Zgadnij" : "Dalej"}
+          {
+            {
+              guessing: "Zgadnij",
+              reviewing: "Dalej",
+              finished: "Jeszcze raz",
+            }[gameState]
+          }
         </button>
 
         <div id="sidebar-bottom">
