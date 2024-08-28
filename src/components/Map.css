@@ -1,0 +1,25 @@
+/* Map.css */
+.map-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+
+.map-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1024px;
+  height: 1024px;
+  transform-origin: top left;
+  cursor: grab;
+}
+
+.marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
