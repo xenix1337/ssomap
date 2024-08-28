@@ -19,6 +19,7 @@ function Guessr() {
   const [photoId, setPhotoId] = useState(0);
   const [gameState, setGameState] = useState("guessing");
   const [points, setPoints] = useState(0);
+  const [photoFullscreened, setPhotoFullscreened] = useState(false);
 
   const handleMapClick = ({ x, y }) => {
     if (gameState !== "guessing") return;
@@ -54,11 +55,31 @@ function Guessr() {
         <h2>SSO Guessr</h2>
 
         {gameState !== "finished" ? (
-          <img
-            className="guessr-photo"
-            alt="Zdjęcie lokacji, zgadnij gdzie zostało zrobione"
-            src={`/guessr-img/${getCurentPhoto().url}`}
-          ></img>
+          <>
+            <img
+              className="guessr-photo"
+              alt="Zdjęcie lokacji, zgadnij gdzie zostało zrobione"
+              src={`/guessr-img/${getCurentPhoto().url}`}
+              onClick={() => {
+                setPhotoFullscreened(true);
+              }}
+            ></img>
+            <span>Kliknij na zdjęcie, aby powiększyć</span>
+            <hr></hr>
+            {photoFullscreened && (
+              <div
+                id="fullscreen"
+                onClick={() => {
+                  setPhotoFullscreened(false);
+                }}
+              >
+                <img
+                  src={`/guessr-img/${getCurentPhoto().url}`}
+                  alt="Duży podgląd zdjęcia"
+                ></img>
+              </div>
+            )}
+          </>
         ) : (
           <div>
             Gratulacje! Twój wynik to {points}/{5000 * roundCount}
@@ -70,7 +91,7 @@ function Guessr() {
         </div>
 
         <button
-          class="guess-button"
+          className="guess-button"
           disabled={guessMarker === null && gameState !== "finished"}
           onClick={() => {
             if (gameState === "guessing") {
