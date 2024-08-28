@@ -6,7 +6,7 @@ import guessImg from "../img/guess.png";
 
 const Marker = ({ x, y, scale }) => (
   <img
-    className="marker"
+    className="map-marker"
     alt="Guess Marker"
     src={guessImg}
     style={{

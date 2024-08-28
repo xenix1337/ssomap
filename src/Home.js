@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import fastTravelIcon from "./img/fasttravel.png";
 import csIcon from "./img/cs.png";
+import guessrIcon from "./img/guess.png";
 import mapImg from "./img/map.png";
 
 import "./style.css";
@@ -11,11 +12,13 @@ import Marker from "./components/Marker";
 
 import { fastTravelMarkers } from "./data/fastTravel";
 import { getNextCsInfo, csMarkers } from "./data/cs";
+import { photos } from "./data/guessr";
 
 function Home() {
   const filters = [
     { id: "FAST_TRAVEL", icon: fastTravelIcon, text: "Szybka podróż" },
     { id: "NEXT_CS", icon: csIcon, text: "Następne zawody" },
+    { id: "GUESSR", icon: guessrIcon, text: "Lokacje SSO Guessr" },
   ];
 
   const [activeFilters, setActiveFilters] = useState(() => {
@@ -119,6 +122,17 @@ function Home() {
               }
             ></Marker>
           )}
+
+          {activeFilters.includes("GUESSR") &&
+            photos.map((marker) => (
+              <Marker
+                key={marker.url}
+                type="guessr"
+                x={marker.x}
+                y={marker.y}
+                tooltip={`X: ${marker.x}, Y: ${marker.y}`}
+              ></Marker>
+            ))}
         </div>
       </div>
     </>

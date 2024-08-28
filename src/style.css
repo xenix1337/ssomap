@@ -45,6 +45,9 @@ body {
 .marker.fasttravel {
   background-image: url("img/fasttravel.png");
 }
+.marker.guessr {
+  background-image: url("img/guess.png");
+}
 
 .filter-item {
   display: flex;
