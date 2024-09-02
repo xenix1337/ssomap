@@ -6,6 +6,11 @@ export const photos = [
   { x: 229, y: 264, url: "229x264.png" },
   { x: 238, y: 108, url: "238x108.png" },
   { x: 247, y: 89, url: "247x89.png" },
+  { x: 185, y: 229, url: "x=185, y=229.png" },
+  { x: 204, y: 182, url: "x=204,y=182.png" },
+  { x: 242, y: 193, url: "x=242, y=193.png" },
+  { x: 247, y: 91, url: "x=247, y=91.png" },
+  { x: 288, y: 390, url: "x=288, y=390.png" },
 ];
 
 function getRandomElements(array, numberOfElements) {

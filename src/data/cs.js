@@ -2,7 +2,7 @@ export const csMarkers = {
   moorland: { name: "Moorland", x: 198, y: 246 },
   pinta: { name: "Fort Pinta", x: 246, y: 253 },
   silversong: { name: "Mistrzostwa kucyków", x: 228, y: 235 },
-  baron: { name: "Mistrzostwa baronowej", x: 0, y: 0 }, // TODO: find it
+  baron: { name: "Mistrzostwa baronowej", x: 144, y: 132 },
   gold: { name: "Dolina Złotych Wzgórz", x: 96, y: 150 },
   jorvik: { name: "Stajnia Jorvik", x: 22, y: 229 },
   silver: { name: "Srebrna Polana", x: 176, y: 186 },
