@@ -36,6 +36,7 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   margin-left: -10px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;
 }
 
 #fullscreen {
@@ -91,4 +92,8 @@
 .game-status.finished {
   font-size: 40px;
   transition: font-size 2s;
+}
+
+h2 {
+  text-align: center;
 }

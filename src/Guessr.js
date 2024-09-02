@@ -168,7 +168,10 @@ function Guessr() {
         </button>
 
         <div id="sidebar-bottom">
-          <span>Hello!</span>
+          <span>
+            Łukasz Skabowski<sup>&copy;</sup> |{" "}
+            <a href="https://github.com/xenix1337/ssomap">Kod źródłowy</a>
+          </span>
         </div>
       </div>
 
