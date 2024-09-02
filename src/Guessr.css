@@ -32,9 +32,10 @@
 }
 
 .guessr-photo {
-  width: 100%;
+  width: calc(100% + 20px);
   cursor: pointer;
   transition: transform 0.3s ease;
+  margin-left: -10px;
 }
 
 #fullscreen {
@@ -67,4 +68,27 @@
     rgb(248, 127, 147) 16px
   );
   transform-origin: top;
+}
+
+.hint {
+  color: #515558;
+  font-size: 0.75em;
+}
+
+.game-status {
+  font-size: 20px;
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+  transition: font-size 0s;
+}
+
+.game-status-column {
+  text-align: center;
+  width: 50%;
+}
+
+.game-status.finished {
+  font-size: 40px;
+  transition: font-size 2s;
 }

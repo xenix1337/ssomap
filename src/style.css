@@ -3,16 +3,16 @@
 }
 body {
   margin: 0;
-  background-color: #333;
-  color: #fff;
+  background-color: #fbfaf5;
+  color: #000000;
   display: flex;
   height: 100vh;
   font-family: "Lato", sans-serif;
   overflow: hidden;
 }
 #sidebar {
-  width: 250px;
-  background-color: #444;
+  width: 350px;
+  background-color: #f7e3ee;
   padding: 10px;
   box-sizing: border-box;
   position: relative;
@@ -109,9 +109,14 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgb(32, 32, 32);
+  background-color: rgb(226, 201, 201);
   padding: 3px;
   text-align: center;
   box-sizing: content-box;
   height: 1em;
+}
+
+.result-comment {
+  text-align: center;
+  font-size: 1.2em;
 }

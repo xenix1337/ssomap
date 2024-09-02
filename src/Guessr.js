@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot, faMedal } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { getRandomPhotos } from "./data/guessr";
 
 import Map from "./components/Map";
+import ResultComment from "./components/ResultComment";
 
 import "./style.css";
 import "./tooltip.css";
@@ -10,7 +15,7 @@ import "./Guessr.css";
 import { calculatePoints } from "./utils/guessr";
 
 function Guessr() {
-  const roundCount = 3;
+  const roundCount = 5;
 
   const [markers, setMarkers] = useState([]);
 
@@ -27,7 +32,6 @@ function Guessr() {
   };
 
   const getCurentPhoto = () => {
-    console.log(photos[photoId]);
     return photos[photoId];
   };
 
@@ -45,12 +49,30 @@ function Guessr() {
       },
       guessMarker
     );
-    console.log("add " + pointsToAdd + " points");
     setPoints((prevPoints) => prevPoints + pointsToAdd);
+    if (pointsToAdd === 0) {
+      toast("😥 Zupełnie nie tak... 0 punktów");
+    } else if (pointsToAdd < 5000) {
+      toast(`👍 Nieźle! Zdobywasz ${pointsToAdd} punktów!`);
+    } else {
+      toast(`💕 PERFEKCYJNIE! ${pointsToAdd} PUNKTÓW!`);
+    }
   };
 
   return (
     <>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3500}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={false}
+        theme="light"
+        transition={Zoom}
+      />
       <div id="sidebar">
         <h2>SSO Guessr</h2>
 
@@ -64,8 +86,6 @@ function Guessr() {
                 setPhotoFullscreened(true);
               }}
             ></img>
-            <span>Kliknij na zdjęcie, aby powiększyć</span>
-            <hr></hr>
             {photoFullscreened && (
               <div
                 id="fullscreen"
@@ -81,13 +101,27 @@ function Guessr() {
             )}
           </>
         ) : (
-          <div>
-            Gratulacje! Twój wynik to {points}/{5000 * roundCount}
-          </div>
+          <ResultComment
+            points={points}
+            maxPoints={5000 * roundCount}
+          ></ResultComment>
         )}
 
-        <div>
-          {points}/{5000 * roundCount}
+        <div className={"game-status " + gameState}>
+          {gameState !== "finished" && (
+            <div className="game-status-column">
+              <div className="game-status-row">
+                <FontAwesomeIcon icon={faLocationDot} />
+              </div>
+              <div className="game-status-row">{photoId + 1}</div>
+            </div>
+          )}
+          <div className="game-status-column">
+            <div className="game-status-row">
+              <FontAwesomeIcon icon={faMedal} />
+            </div>
+            <div className="game-status-row">{points}</div>
+          </div>
         </div>
 
         <button
