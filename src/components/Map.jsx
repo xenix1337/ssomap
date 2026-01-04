@@ -9,14 +9,11 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
   const [translateY, setTranslateY] = useState(512);
   const mapRef = useRef(null);
 
+  const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
+
   const handleContainerMouseMove = (e) => {
     if (onMouseMove && mapRef.current) {
       const rect = mapRef.current.getBoundingClientRect();
-      // Calculate x/y relative to the map image, accounting for scale
-      // The map image is centered and transformed.
-      // Easiest is to reverse the transform logic or just use the visually rendered rect of the image?
-      // Actually, mapRef is on the img.
-
       const x = (e.clientX - rect.left) / scale;
       const y = (e.clientY - rect.top) / scale;
 
@@ -92,8 +89,9 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
           return false;
         }}
       />
-      {lines.map((line) => (
+      {lines.map((line, index) => (
         <div
+          key={index}
           className="line"
           style={{
             top: `50%`,
@@ -126,6 +124,8 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
             }px, ${marker.y - translateY}px) scale(${1 / scale})`,
             cursor: marker.image ? "pointer" : "inherit",
           }}
+          onMouseEnter={() => setHoveredMarkerIndex(index)}
+          onMouseLeave={() => setHoveredMarkerIndex(null)}
           onClick={(e) => {
             if (marker.image) {
               e.stopPropagation();
@@ -135,7 +135,9 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
         >
           {marker.image && (
             <div className="custom-tooltip">
-              <img src={marker.image} alt="Location thumbnail" />
+              {hoveredMarkerIndex === index && (
+                <img src={marker.image} alt="Location thumbnail" />
+              )}
               <div>{marker.tooltip}</div>
               <div className="tooltip-arrow"></div>
             </div>

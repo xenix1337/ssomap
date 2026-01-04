@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faMedal } from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer, Zoom, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { getRandomPhotos } from "./data/guessr";
 
 import Map from "./components/Map";
 import ResultComment from "./components/ResultComment";
+import Navigation from "./components/Navigation";
 
 import "./style.css";
 import "./tooltip.css";
 import "./Guessr.css";
 import { calculatePoints } from "./utils/guessr";
 
-function Guessr() {
+function Guessr({ data }) {
   const roundCount = 5;
 
   const [markers, setMarkers] = useState([]);
 
   const [guessMarker, setGuessMarker] = useState(null);
-  const [allPhotos, setAllPhotos] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [photoId, setPhotoId] = useState(0);
   const [gameState, setGameState] = useState("loading");
@@ -28,23 +28,11 @@ function Guessr() {
   const [photoFullscreened, setPhotoFullscreened] = useState(false);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_STATIC_URL}/data.json`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setAllPhotos(data);
-        setPhotos(getRandomPhotos(data, roundCount));
-        setGameState("guessing");
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        toast.error("Błąd pobierania danych: " + error.message);
-      });
-  }, []);
+    if (data && data.length > 0) {
+      setPhotos(getRandomPhotos(data, roundCount));
+      setGameState("guessing");
+    }
+  }, [data]);
 
   const handleMapClick = ({ x, y }) => {
     if (gameState !== "guessing") return;
@@ -83,19 +71,8 @@ function Guessr() {
 
   return (
     <>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={3500}
-        newestOnTop={false}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover={false}
-        theme="light"
-        transition={Zoom}
-      />
       <div id="sidebar">
+        <Navigation />
         <h2>SSO Guessr</h2>
 
         {gameState === "loading" && <div className="loading">Ładowanie...</div>}
@@ -177,7 +154,7 @@ function Guessr() {
                 setGameState("finished");
               }
             } else if (gameState === "finished") {
-              setPhotos(getRandomPhotos(allPhotos, roundCount));
+              setPhotos(getRandomPhotos(data, roundCount));
               setGameState("guessing");
               setMarkers([]);
               setGuessMarker(null);

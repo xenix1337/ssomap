@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { ToastContainer, Zoom, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import fastTravelIcon from "./img/fasttravel.png";
 import csIcon from "./img/cs.png";
@@ -10,11 +8,12 @@ import "./style.css";
 import "./tooltip.css";
 
 import Map from "./components/Map";
+import Navigation from "./components/Navigation";
 
 import { fastTravelMarkers } from "./data/fastTravel";
 import { getNextCsInfo, csMarkers } from "./data/cs";
 
-function Home() {
+function Home({ data }) {
   const filters = [
     { id: "FAST_TRAVEL", icon: fastTravelIcon, text: "Szybka podróż" },
     { id: "NEXT_CS", icon: csIcon, text: "Następne zawody" },
@@ -27,7 +26,6 @@ function Home() {
   });
   const [nextCsInfo, setNextCsInfo] = useState(null);
   const [mousePos, setMousePos] = useState(null);
-  const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
     setNextCsInfo(getNextCsInfo());
@@ -35,21 +33,6 @@ function Home() {
     const timer = setInterval(() => {
       setNextCsInfo(getNextCsInfo());
     }, 1000);
-
-    fetch(`${process.env.REACT_APP_BASE_STATIC_URL}/data.json`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPhotos(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        toast.error("Błąd pobierania danych: " + error.message);
-      });
 
     return () => clearInterval(timer);
   }, []);
@@ -70,19 +53,8 @@ function Home() {
   }
   return (
     <>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={3500}
-        newestOnTop={false}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover={false}
-        theme="light"
-        transition={Zoom}
-      />
       <div id="sidebar">
+        <Navigation />
         <h2>Filtry</h2>
         <h3>Ogólne</h3>
         {filters.map((filter) => (
@@ -129,7 +101,7 @@ function Home() {
                 ]
               : []),
             ...(activeFilters.includes("GUESSR")
-              ? photos.map((m) => ({
+              ? data.map((m) => ({
                   ...m,
                   type: "guessr",
                   tooltip: `X: ${m.x}, Y: ${m.y}`,
