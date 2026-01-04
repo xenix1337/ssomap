@@ -9,15 +9,23 @@ import "./tooltip.css";
 
 import Map from "./components/Map";
 import Navigation from "./components/Navigation";
+import LanguageSelector from "./components/LanguageSelector";
+import { useLanguage } from "./contexts/LanguageContext";
 
 import { fastTravelMarkers } from "./data/fastTravel";
 import { getNextCsInfo, csMarkers } from "./data/cs";
 
 function Home({ data }) {
+  const { t } = useLanguage();
+
   const filters = [
-    { id: "FAST_TRAVEL", icon: fastTravelIcon, text: "Szybka podróż" },
-    { id: "NEXT_CS", icon: csIcon, text: "Następne zawody" },
-    { id: "GUESSR", icon: guessrIcon, text: "Lokacje SSO Guessr" },
+    {
+      id: "FAST_TRAVEL",
+      icon: fastTravelIcon,
+      text: t("home.filterItems.FAST_TRAVEL"),
+    },
+    { id: "NEXT_CS", icon: csIcon, text: t("home.filterItems.NEXT_CS") },
+    { id: "GUESSR", icon: guessrIcon, text: t("home.filterItems.GUESSR") },
   ];
 
   const [activeFilters, setActiveFilters] = useState(() => {
@@ -55,8 +63,9 @@ function Home({ data }) {
     <>
       <div id="sidebar">
         <Navigation />
-        <h2>Filtry</h2>
-        <h3>Ogólne</h3>
+        <LanguageSelector />
+        <h2>{t("home.filters")}</h2>
+        <h3>{t("home.general")}</h3>
         {filters.map((filter) => (
           <div className="filter-item" key={filter.id}>
             <label>
@@ -73,7 +82,9 @@ function Home({ data }) {
         ))}
         <div id="sidebar-bottom">
           <span>
-            {mousePos != null ? `X: ${mousePos.x}, Y: ${mousePos.y}` : ""}
+            {mousePos != null
+              ? t("home.coordinates", { x: mousePos.x, y: mousePos.y })
+              : ""}
           </span>
         </div>
       </div>

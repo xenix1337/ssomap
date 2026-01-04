@@ -1,0 +1,75 @@
+export const en = {
+  navigation: {
+    map: "Map",
+    guessr: "Guessr",
+  },
+  home: {
+    filters: "Filters",
+    general: "General",
+    filterItems: {
+      FAST_TRAVEL: "Fast Travel",
+      NEXT_CS: "Next Competition",
+      GUESSR: "SSO Guessr Locations",
+    },
+    coordinates: "X: {x}, Y: {y}",
+  },
+  guessr: {
+    title: "SSO Guessr",
+    loading: "Loading...",
+    buttons: {
+      guess: "Guess",
+      next: "Next",
+      again: "Play Again",
+    },
+    toasts: {
+      zeroPoints: "😥 Not quite... 0 points",
+      goodPoints: "👍 Not bad! You scored {points} points!",
+      perfectPoints: "💕 PERFECT! {points} POINTS!",
+      fetchError: "Error fetching data: {message}",
+    },
+    alt: {
+      locationPhoto: "Location photo, guess where it was taken",
+      fullscreenPreview: "Fullscreen photo preview",
+    },
+    result: {
+      perfect: [
+        "Congratulations! You are a true location master!",
+        "Perfection! Your knowledge of Jorvik is impressive.",
+        "Exceptional memory! You have a great eye for detail.",
+        "Bravo! You identified every location flawlessly!",
+      ],
+      almostPerfect: [
+        "Fantastic! You are almost a master at recognizing locations.",
+        "Practically perfect! Just a few details to improve.",
+        "Impressive! Only minor tweaks separate you from perfection.",
+        "Great! You are at a very high level.",
+        "Not much missing for a perfect score!",
+      ],
+      great: [
+        "Great job! You are almost an expert.",
+        "Very close! A few minor adjustments and you'll be at the top.",
+        "Feeling confident? One more moment and you'll be the best!",
+        "Very good! Only a few details left to refine.",
+      ],
+      good: [
+        "Not bad, but you can do better!",
+        "Close, but still some work ahead of you.",
+        "A few steps forward and you'll be a master!",
+        "You are starting to get going. Continue in this direction!",
+      ],
+      sad: [
+        "That didn't go very well. Try again!",
+        "Look around Jorvik and come back enlightened...",
+        "Don't you get lost in your own house with such a memory?",
+        "Oh my, that's not the best score. Maybe next time will be better?",
+        "Don't get discouraged! Every attempt brings you closer to the goal.",
+        "Looks like you need a bit more practice.",
+        "Don't worry, even the best started from zero!",
+      ],
+    },
+    footer: {
+      author: "Łukasz Skabowski",
+      source: "Source Code",
+    },
+  },
+};

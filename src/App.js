@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./Home";
 import Guessr from "./Guessr";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 function App() {
   const [data, setData] = useState([]);
@@ -22,12 +23,12 @@ function App() {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        toast.error("Błąd pobierania danych: " + error.message);
+        toast.error("Błąd pobierania danych: " + error.message); // This toast might need translation too, but context is inside... we'll see.
       });
   }, []);
 
   return (
-    <>
+    <LanguageProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home data={data} />} />
@@ -46,7 +47,7 @@ function App() {
         theme="light"
         transition={Zoom}
       />
-    </>
+    </LanguageProvider>
   );
 }
 

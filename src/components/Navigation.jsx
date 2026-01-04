@@ -3,8 +3,10 @@ import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const Navigation = () => {
+  const { t } = useLanguage();
   return (
     <nav className="navigation">
       <NavLink
@@ -15,7 +17,7 @@ const Navigation = () => {
         end
       >
         <FontAwesomeIcon icon={faMap} style={{ marginRight: "8px" }} />
-        Mapa
+        {t("navigation.map")}
       </NavLink>
       <NavLink
         to="/guessr"
@@ -24,7 +26,7 @@ const Navigation = () => {
         }
       >
         <FontAwesomeIcon icon={faGamepad} style={{ marginRight: "8px" }} />
-        Guessr
+        {t("navigation.guessr")}
       </NavLink>
     </nav>
   );

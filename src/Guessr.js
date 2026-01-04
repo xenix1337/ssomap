@@ -9,6 +9,8 @@ import { getRandomPhotos } from "./data/guessr";
 import Map from "./components/Map";
 import ResultComment from "./components/ResultComment";
 import Navigation from "./components/Navigation";
+import LanguageSelector from "./components/LanguageSelector";
+import { useLanguage } from "./contexts/LanguageContext";
 
 import "./style.css";
 import "./tooltip.css";
@@ -16,6 +18,7 @@ import "./Guessr.css";
 import { calculatePoints } from "./utils/guessr";
 
 function Guessr({ data }) {
+  const { t } = useLanguage();
   const roundCount = 5;
 
   const [markers, setMarkers] = useState([]);
@@ -61,11 +64,11 @@ function Guessr({ data }) {
     );
     setPoints((prevPoints) => prevPoints + pointsToAdd);
     if (pointsToAdd === 0) {
-      toast("😥 Zupełnie nie tak... 0 punktów");
+      toast(t("guessr.toasts.zeroPoints"));
     } else if (pointsToAdd < 5000) {
-      toast(`👍 Nieźle! Zdobywasz ${pointsToAdd} punktów!`);
+      toast(t("guessr.toasts.goodPoints", { points: pointsToAdd }));
     } else {
-      toast(`💕 PERFEKCYJNIE! ${pointsToAdd} PUNKTÓW!`);
+      toast(t("guessr.toasts.perfectPoints", { points: pointsToAdd }));
     }
   };
 
@@ -73,15 +76,18 @@ function Guessr({ data }) {
     <>
       <div id="sidebar">
         <Navigation />
-        <h2>SSO Guessr</h2>
+        <LanguageSelector />
+        <h2>{t("guessr.title")}</h2>
 
-        {gameState === "loading" && <div className="loading">Ładowanie...</div>}
+        {gameState === "loading" && (
+          <div className="loading">{t("guessr.loading")}</div>
+        )}
 
         {gameState !== "finished" && gameState !== "loading" ? (
           <>
             <img
               className="guessr-photo"
-              alt="Zdjęcie lokacji, zgadnij gdzie zostało zrobione"
+              alt={t("guessr.alt.locationPhoto")}
               src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
               onClick={() => {
                 setPhotoFullscreened(true);
@@ -96,7 +102,7 @@ function Guessr({ data }) {
               >
                 <img
                   src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
-                  alt="Duży podgląd zdjęcia"
+                  alt={t("guessr.alt.fullscreenPreview")}
                 ></img>
               </div>
             )}
@@ -165,18 +171,21 @@ function Guessr({ data }) {
         >
           {
             {
-              loading: "Ładowanie...",
-              guessing: "Zgadnij",
-              reviewing: "Dalej",
-              finished: "Jeszcze raz",
+              loading: t("guessr.loading"),
+              guessing: t("guessr.buttons.guess"),
+              reviewing: t("guessr.buttons.next"),
+              finished: t("guessr.buttons.again"),
             }[gameState]
           }
         </button>
 
         <div id="sidebar-bottom">
           <span>
-            Łukasz Skabowski<sup>&copy;</sup> |{" "}
-            <a href="https://github.com/xenix1337/ssomap">Kod źródłowy</a>
+            {t("guessr.footer.author")}
+            <sup>&copy;</sup> |{" "}
+            <a href="https://github.com/xenix1337/ssomap">
+              {t("guessr.footer.source")}
+            </a>
           </span>
         </div>
       </div>
