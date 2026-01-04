@@ -2,34 +2,33 @@ import React, { useState, useRef } from "react";
 import "./Map.css";
 
 import mapImg from "../img/map.png";
-import guessImg from "../img/guess.png";
 
-const Marker = ({ x, y, scale }) => (
-  <img
-    className="map-marker"
-    alt="Guess Marker"
-    src={guessImg}
-    style={{
-      top: `50%`,
-      left: `50%`,
-      transform: `translate(-50%, -50%) scale(${scale}) translate(${x}px, ${y}px) scale(${
-        1 / scale
-      })`,
-    }}
-  />
-);
-
-const Map = ({ markers, lines, onMapClick }) => {
+const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
   const [scale, setScale] = useState(0.9); // TODO: based on screen
   const [translateX, setTranslateX] = useState(512);
   const [translateY, setTranslateY] = useState(512);
   const mapRef = useRef(null);
 
+  const handleContainerMouseMove = (e) => {
+    if (onMouseMove && mapRef.current) {
+      const rect = mapRef.current.getBoundingClientRect();
+      // Calculate x/y relative to the map image, accounting for scale
+      // The map image is centered and transformed.
+      // Easiest is to reverse the transform logic or just use the visually rendered rect of the image?
+      // Actually, mapRef is on the img.
+
+      const x = (e.clientX - rect.left) / scale;
+      const y = (e.clientY - rect.top) / scale;
+
+      onMouseMove({ x: Math.round(x), y: Math.round(y) });
+    }
+  };
+
   const handleWheel = (e) => {
     e.preventDefault();
     const scaleChange = e.deltaY > 0 ? 0.9 : 1.1;
     setScale((prevScale) =>
-      Math.min(Math.max(prevScale * scaleChange, 0.5), 3)
+      Math.min(Math.max(prevScale * scaleChange, 0.5), 3),
     );
   };
 
@@ -44,14 +43,14 @@ const Map = ({ markers, lines, onMapClick }) => {
       setTranslateX(
         Math.min(
           Math.max(startTranslateX - (e.clientX - startX) / scale, 0),
-          1024
-        )
+          1024,
+        ),
       );
       setTranslateY(
         Math.min(
           Math.max(startTranslateY - (e.clientY - startY) / scale, 0),
-          1024
-        )
+          1024,
+        ),
       );
     };
 
@@ -75,6 +74,7 @@ const Map = ({ markers, lines, onMapClick }) => {
       className="map-container"
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
+      onMouseMove={handleContainerMouseMove}
     >
       <img
         className="map-tile"
@@ -107,19 +107,40 @@ const Map = ({ markers, lines, onMapClick }) => {
             height: `${
               Math.sqrt(
                 Math.pow(line.fromX - line.toX, 2) +
-                  Math.pow(line.fromY - line.toY, 2)
+                  Math.pow(line.fromY - line.toY, 2),
               ) * scale
             }px`,
           }}
         ></div>
       ))}
       {markers.map((marker, index) => (
-        <Marker
+        <div
           key={index}
-          x={marker.x - translateX}
-          y={marker.y - translateY}
-          scale={scale}
-        />
+          className={`marker ${marker.type || "guessr"}`}
+          data-tooltip={!marker.image ? marker.tooltip : undefined}
+          style={{
+            top: `50%`,
+            left: `50%`,
+            transform: `translate(-50%, -50%) scale(${scale}) translate(${
+              marker.x - translateX
+            }px, ${marker.y - translateY}px) scale(${1 / scale})`,
+            cursor: marker.image ? "pointer" : "inherit",
+          }}
+          onClick={(e) => {
+            if (marker.image) {
+              e.stopPropagation();
+              window.open(marker.image, "_blank");
+            }
+          }}
+        >
+          {marker.image && (
+            <div className="custom-tooltip">
+              <img src={marker.image} alt="Location thumbnail" />
+              <div>{marker.tooltip}</div>
+              <div className="tooltip-arrow"></div>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faMedal } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, Zoom, toast } from "react-toastify";
@@ -20,18 +20,40 @@ function Guessr() {
   const [markers, setMarkers] = useState([]);
 
   const [guessMarker, setGuessMarker] = useState(null);
-  const [photos, setPhotos] = useState(getRandomPhotos(roundCount));
+  const [allPhotos, setAllPhotos] = useState([]);
+  const [photos, setPhotos] = useState([]);
   const [photoId, setPhotoId] = useState(0);
-  const [gameState, setGameState] = useState("guessing");
+  const [gameState, setGameState] = useState("loading");
   const [points, setPoints] = useState(0);
   const [photoFullscreened, setPhotoFullscreened] = useState(false);
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_STATIC_URL}/data.json`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAllPhotos(data);
+        setPhotos(getRandomPhotos(data, roundCount));
+        setGameState("guessing");
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        toast.error("Błąd pobierania danych: " + error.message);
+      });
+  }, []);
+
   const handleMapClick = ({ x, y }) => {
     if (gameState !== "guessing") return;
-    if (x >= 0 && y >= 0 && x <= 1024 && y <= 1024) setGuessMarker({ x, y });
+    if (x >= 0 && y >= 0 && x <= 1024 && y <= 1024)
+      setGuessMarker({ x, y, type: "guessr" });
   };
 
   const getCurentPhoto = () => {
+    if (photos.length === 0) return { url: "", x: 0, y: 0 };
     return photos[photoId];
   };
 
@@ -47,7 +69,7 @@ function Guessr() {
         x: (getCurentPhoto().x / 409) * 1024,
         y: (getCurentPhoto().y / 409) * 1024,
       },
-      guessMarker
+      guessMarker,
     );
     setPoints((prevPoints) => prevPoints + pointsToAdd);
     if (pointsToAdd === 0) {
@@ -76,12 +98,14 @@ function Guessr() {
       <div id="sidebar">
         <h2>SSO Guessr</h2>
 
-        {gameState !== "finished" ? (
+        {gameState === "loading" && <div className="loading">Ładowanie...</div>}
+
+        {gameState !== "finished" && gameState !== "loading" ? (
           <>
             <img
               className="guessr-photo"
               alt="Zdjęcie lokacji, zgadnij gdzie zostało zrobione"
-              src={`/guessr-img/${getCurentPhoto().url}`}
+              src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
               onClick={() => {
                 setPhotoFullscreened(true);
               }}
@@ -94,21 +118,21 @@ function Guessr() {
                 }}
               >
                 <img
-                  src={`/guessr-img/${getCurentPhoto().url}`}
+                  src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
                   alt="Duży podgląd zdjęcia"
                 ></img>
               </div>
             )}
           </>
-        ) : (
+        ) : gameState === "finished" ? (
           <ResultComment
             points={points}
             maxPoints={5000 * roundCount}
           ></ResultComment>
-        )}
+        ) : null}
 
         <div className={"game-status " + gameState}>
-          {gameState !== "finished" && (
+          {gameState !== "finished" && gameState !== "loading" && (
             <div className="game-status-column">
               <div className="game-status-row">
                 <FontAwesomeIcon icon={faLocationDot} />
@@ -126,7 +150,10 @@ function Guessr() {
 
         <button
           className="guess-button"
-          disabled={guessMarker === null && gameState !== "finished"}
+          disabled={
+            (guessMarker === null && gameState !== "finished") ||
+            gameState === "loading"
+          }
           onClick={() => {
             if (gameState === "guessing") {
               addPoints();
@@ -136,8 +163,9 @@ function Guessr() {
                   {
                     x: (getCurentPhoto().x / 409) * 1024,
                     y: (getCurentPhoto().y / 409) * 1024,
+                    type: "guessr",
                   },
-                ])
+                ]),
               );
             } else if (gameState === "reviewing") {
               setGameState("guessing");
@@ -149,7 +177,7 @@ function Guessr() {
                 setGameState("finished");
               }
             } else if (gameState === "finished") {
-              setPhotos(getRandomPhotos(roundCount));
+              setPhotos(getRandomPhotos(allPhotos, roundCount));
               setGameState("guessing");
               setMarkers([]);
               setGuessMarker(null);
@@ -160,6 +188,7 @@ function Guessr() {
         >
           {
             {
+              loading: "Ładowanie...",
               guessing: "Zgadnij",
               reviewing: "Dalej",
               finished: "Jeszcze raz",

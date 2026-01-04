@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import fastTravelIcon from "./img/fasttravel.png";
 import csIcon from "./img/cs.png";
 import guessrIcon from "./img/guess.png";
-import mapImg from "./img/map.png";
 
 import "./style.css";
 import "./tooltip.css";
 
-import Marker from "./components/Marker";
+import Map from "./components/Map";
 
 import { fastTravelMarkers } from "./data/fastTravel";
 import { getNextCsInfo, csMarkers } from "./data/cs";
-import { photos } from "./data/guessr";
 
 function Home() {
   const filters = [
@@ -27,7 +27,7 @@ function Home() {
   });
   const [nextCsInfo, setNextCsInfo] = useState(null);
   const [mousePos, setMousePos] = useState(null);
-  const mapRef = useRef(null);
+  const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
     setNextCsInfo(getNextCsInfo());
@@ -35,6 +35,21 @@ function Home() {
     const timer = setInterval(() => {
       setNextCsInfo(getNextCsInfo());
     }, 1000);
+
+    fetch(`${process.env.REACT_APP_BASE_STATIC_URL}/data.json`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setPhotos(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        toast.error("Błąd pobierania danych: " + error.message);
+      });
 
     return () => clearInterval(timer);
   }, []);
@@ -55,6 +70,18 @@ function Home() {
   }
   return (
     <>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3500}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={false}
+        theme="light"
+        transition={Zoom}
+      />
       <div id="sidebar">
         <h2>Filtry</h2>
         <h3>Ogólne</h3>
@@ -80,60 +107,49 @@ function Home() {
       </div>
 
       <div id="main-pane">
-        <div
-          id="map"
-          ref={mapRef}
-          onMouseMove={(e) => {
-            const rect = mapRef.current.getBoundingClientRect();
-            const x = Math.round(((e.clientX - rect.left) / rect.width) * 409);
-            const y = Math.round(((e.clientY - rect.top) / rect.height) * 409);
-            setMousePos({ x: x, y: y });
+        <Map
+          markers={[
+            ...(activeFilters.includes("FAST_TRAVEL")
+              ? fastTravelMarkers.map((m) => ({
+                  ...m,
+                  type: "fasttravel",
+                  tooltip: m.name,
+                }))
+              : []),
+            ...(activeFilters.includes("NEXT_CS") && nextCsInfo != null
+              ? [
+                  {
+                    ...csMarkers[nextCsInfo.location],
+                    type: "cs",
+                    tooltip:
+                      csMarkers[nextCsInfo.location].name +
+                      ", " +
+                      nextCsInfo.timeLeftString,
+                  },
+                ]
+              : []),
+            ...(activeFilters.includes("GUESSR")
+              ? photos.map((m) => ({
+                  ...m,
+                  type: "guessr",
+                  tooltip: `X: ${m.x}, Y: ${m.y}`,
+                  image: `${process.env.REACT_APP_BASE_STATIC_URL}/${m.url}`,
+                }))
+              : []),
+          ].map((m) => ({
+            ...m,
+            x: (m.x / 409) * 1024,
+            y: (m.y / 409) * 1024,
+          }))}
+          lines={[]}
+          onMouseMove={({ x, y }) => {
+            setMousePos({
+              x: Math.round((x / 1024) * 409),
+              y: Math.round((y / 1024) * 409),
+            });
           }}
-          onMouseLeave={() => {
-            setMousePos(null);
-          }}
-        >
-          <img
-            src={mapImg}
-            alt="Map"
-            style={{ width: "100%", height: "100%" }}
-          />
-
-          {activeFilters.includes("FAST_TRAVEL") &&
-            fastTravelMarkers.map((marker) => (
-              <Marker
-                key={marker.name}
-                type="fasttravel"
-                x={marker.x}
-                y={marker.y}
-                tooltip={marker.name}
-              ></Marker>
-            ))}
-
-          {activeFilters.includes("NEXT_CS") && nextCsInfo != null && (
-            <Marker
-              type="cs"
-              x={csMarkers[nextCsInfo.location].x}
-              y={csMarkers[nextCsInfo.location].y}
-              tooltip={
-                csMarkers[nextCsInfo.location].name +
-                ", " +
-                nextCsInfo.timeLeftString
-              }
-            ></Marker>
-          )}
-
-          {activeFilters.includes("GUESSR") &&
-            photos.map((marker) => (
-              <Marker
-                key={marker.url}
-                type="guessr"
-                x={marker.x}
-                y={marker.y}
-                tooltip={`X: ${marker.x}, Y: ${marker.y}`}
-              ></Marker>
-            ))}
-        </div>
+          onMapClick={() => {}}
+        />
       </div>
     </>
   );
