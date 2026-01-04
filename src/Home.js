@@ -25,7 +25,15 @@ function Home({ data }) {
       text: t("home.filterItems.FAST_TRAVEL"),
     },
     { id: "NEXT_CS", icon: csIcon, text: t("home.filterItems.NEXT_CS") },
-    { id: "GUESSR", icon: guessrIcon, text: t("home.filterItems.GUESSR") },
+    ...(process.env.REACT_APP_SHOW_GUESSR_LOCATIONS === "true"
+      ? [
+          {
+            id: "GUESSR",
+            icon: guessrIcon,
+            text: t("home.filterItems.GUESSR"),
+          },
+        ]
+      : []),
   ];
 
   const [activeFilters, setActiveFilters] = useState(() => {
@@ -111,7 +119,8 @@ function Home({ data }) {
                   },
                 ]
               : []),
-            ...(activeFilters.includes("GUESSR")
+            ...(activeFilters.includes("GUESSR") &&
+            process.env.REACT_APP_SHOW_GUESSR_LOCATIONS === "true"
               ? data.map((m) => ({
                   ...m,
                   type: "guessr",
