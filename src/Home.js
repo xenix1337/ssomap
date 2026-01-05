@@ -102,11 +102,17 @@ function Home({ data }) {
         <Map
           markers={[
             ...(activeFilters.includes("FAST_TRAVEL")
-              ? fastTravelMarkers.map((m) => ({
-                  ...m,
-                  type: "fasttravel",
-                  tooltip: m.name,
-                }))
+              ? fastTravelMarkers.map((m) => {
+                  const translatedName = t(`fastTravel.${m.id}`);
+                  return {
+                    ...m,
+                    type: "fasttravel",
+                    tooltip:
+                      translatedName === `fastTravel.${m.id}`
+                        ? m.name
+                        : translatedName,
+                  };
+                })
               : []),
             ...(activeFilters.includes("NEXT_CS") && nextCsInfo != null
               ? [

@@ -1,39 +1,54 @@
 export const fastTravelMarkers = [
-  { name: "Chatka Hermita", x: 202, y: 400 }, // Hermit's Cottage
-  { name: "Druidzki wybieg", x: 246, y: 90 }, // Druid Paddock
-  { name: "Dundull", x: 390, y: 348 }, // Dundull
-  { name: "Dwór Srebrnej Polany", x: 141, y: 178 }, // Silverglade Manor
-  { name: "Dyniowa Farma Jaspera", x: 118, y: 149 }, // Jasper's Pumpkin Farm
-  { name: "Farma Burza", x: 87, y: 297 }, // Stormgarden
-  { name: "Farma Południowego Kopyta", x: 264, y: 350 }, // South Hoof Farm
-  { name: "Farma Słonecznikowych Pól", x: 26, y: 237 }, // Sunfield Farm
-  { name: "Farma Steve'a", x: 204, y: 193 }, // Steve's Farm
-  { name: "Fort Pinta", x: 238, y: 266 }, // Fort Pinta
-  { name: "Gospodarstwo Birka", x: 323, y: 258 }, // Birk's Grange
-  { name: "Jarlaheim", x: 41, y: 237 }, // Jarlaheim
-  { name: "Jezioro Valedale", x: 318, y: 125 }, // Valedale Lake
-  { name: "Kryjówka Mistrza Szpiegowania", x: 236, y: 78 }, // Spymaster's hideout
-  { name: "Księżycowy Sierp", x: 93, y: 330 }, // Crescent Moon Village
-  { name: "Lodowy Portal", x: 320, y: 10 }, // Icengate
-  { name: "Miasteczko Srebrnej Polany", x: 184, y: 199 }, // Silverglade Village
-  { name: "Posterunek Sekwoi", x: 367, y: 250 }, // Redwood Point
-  { name: "Ranczo Starshine", x: 302, y: 228 }, // Starshine Ranch
-  { name: "Stajnia Moorland", x: 188, y: 241 }, // Moorland Stables
-  { name: "Stajnia Nowej Grani", x: 157, y: 348 }, // New Hillcrest Stables
-  { name: "Stajnia Złotych Liści", x: 32, y: 90 }, // Goldenleaf Stables
-  { name: "Stodoła klasyki Marleya", x: 175, y: 179 }, // Marley's Vintage Barn
-  { name: "Tor wyścigowy Baronowej", x: 171, y: 133 }, // Baroness' Racetrack
-  { name: "Ujeżdżalnia", x: 118, y: 176 }, // Riding Arena
-  { name: "Wioska Jodłowy Gaj", x: 337, y: 175 }, // Firgrove Village
-  { name: "Wioska Pięknego Ogona", x: 405, y: 197 }, // Tailtop Village
-  { name: "Wioska Valedale", x: 272, y: 108 }, // Valedale Village
-  { name: "Wyspa Padok", x: 22, y: 273 }, // Paddock Island
-  { name: "Wzgórze Nilmera", x: 151, y: 221 }, // Nilmer's Highland
-  { name: "Zachodni Przylądek", x: 42, y: 127 }, // Cape West Fishing Village
-  { name: "Zajazd pod Wilkiem", x: 142, y: 253 }, // Wolf Hall Inn
-  { name: "Zapomniane Pola", x: 87, y: 207 }, // The Forgotten Fields
-  { name: "Plaża Fortu Pinta", x: 244, y: 260 }, // Fort Pinta Beach
-  { name: "Średniowieczny obóz", x: 89, y: 173 }, // Medieval Camp
-  { name: "Obozowisko Nica Stoneground", x: 308, y: 49 }, // Nic Stoneground's Camp
-  { name: "Pola Everwind", x: 182, y: 161 }, // The Everwind Fields
+  { id: "HERMITS_COTTAGE", name: "Hermit's Cottage", x: 202, y: 400 },
+  { id: "DRUID_PADDOCK", name: "Druid Paddock", x: 246, y: 90 },
+  { id: "DUNDULL", name: "Dundull", x: 390, y: 348 },
+  { id: "SILVERGLADE_MANOR", name: "Silverglade Manor", x: 141, y: 178 },
+  { id: "JASPERS_PUMPKIN_FARM", name: "Jasper's Pumpkin Farm", x: 118, y: 149 },
+  { id: "STORMGARDEN", name: "Stormgarden", x: 87, y: 297 },
+  { id: "SOUTH_HOOF_FARM", name: "South Hoof Farm", x: 264, y: 350 },
+  { id: "SUNFIELD_FARM", name: "Sunfield Farm", x: 26, y: 237 },
+  { id: "STEVES_FARM", name: "Steve's Farm", x: 204, y: 193 },
+  { id: "FORT_PINTA", name: "Fort Pinta", x: 238, y: 266 },
+  { id: "BIRKS_GRANGE", name: "Birk's Grange", x: 323, y: 258 },
+  { id: "JARLAHEIM", name: "Jarlaheim", x: 41, y: 237 },
+  { id: "VALEDALE_LAKE", name: "Valedale Lake", x: 318, y: 125 },
+  { id: "SPYMASTERS_HIDEOUT", name: "Spymaster's hideout", x: 236, y: 78 },
+  { id: "CRESCENT_MOON_VILLAGE", name: "Crescent Moon Village", x: 93, y: 330 },
+  { id: "ICENGATE", name: "Icengate", x: 320, y: 10 },
+  { id: "SILVERGLADE_VILLAGE", name: "Silverglade Village", x: 184, y: 199 },
+  { id: "REDWOOD_POINT", name: "Redwood Point", x: 367, y: 250 },
+  { id: "STARSHINE_RANCH", name: "Starshine Ranch", x: 302, y: 228 },
+  { id: "MOORLAND_STABLES", name: "Moorland Stables", x: 188, y: 241 },
+  {
+    id: "NEW_HILLCREST_STABLES",
+    name: "New Hillcrest Stables",
+    x: 157,
+    y: 348,
+  },
+  { id: "GOLDENLEAF_STABLES", name: "Goldenleaf Stables", x: 32, y: 90 },
+  { id: "MARLEYS_VINTAGE_BARN", name: "Marley's Vintage Barn", x: 175, y: 179 },
+  { id: "BARONESS_RACETRACK", name: "Baroness' Racetrack", x: 171, y: 133 },
+  { id: "RIDING_ARENA", name: "Riding Arena", x: 118, y: 176 },
+  { id: "FIRGROVE_VILLAGE", name: "Firgrove Village", x: 337, y: 175 },
+  { id: "TAILTOP_VILLAGE", name: "Tailtop Village", x: 405, y: 197 },
+  { id: "VALEDALE_VILLAGE", name: "Valedale Village", x: 272, y: 108 },
+  { id: "PADDOCK_ISLAND", name: "Paddock Island", x: 22, y: 273 },
+  { id: "NILMERS_HIGHLAND", name: "Nilmer's Highland", x: 151, y: 221 },
+  {
+    id: "CAPE_WEST_FISHING_VILLAGE",
+    name: "Cape West Fishing Village",
+    x: 42,
+    y: 127,
+  },
+  { id: "WOLF_HALL_INN", name: "Wolf Hall Inn", x: 142, y: 253 },
+  { id: "THE_FORGOTTEN_FIELDS", name: "The Forgotten Fields", x: 87, y: 207 },
+  { id: "FORT_PINTA_BEACH", name: "Fort Pinta Beach", x: 244, y: 260 },
+  { id: "MEDIEVAL_CAMP", name: "Medieval Camp", x: 89, y: 173 },
+  {
+    id: "NIC_STONEGROUNDS_CAMP",
+    name: "Nic Stoneground's Camp",
+    x: 308,
+    y: 49,
+  },
+  { id: "THE_EVERWIND_FIELDS", name: "The Everwind Fields", x: 182, y: 161 },
 ];
