@@ -114,4 +114,20 @@ export const en = {
     NIC_STONEGROUNDS_CAMP: "Nic Stoneground's Camp",
     THE_EVERWIND_FIELDS: "The Everwind Fields",
   },
+  championships: {
+    moorland: "Moorland",
+    pinta: "Fort Pinta",
+    silversong: "Silversong Pony Championship",
+    baron: "Baroness' Championship",
+    gold: "Goldenhills",
+    jorvik: "Jorvik Stables",
+    silver: "Silverglade Village",
+    grove: "Firgrove",
+    gran: "New Hillcrest",
+    valedale: "Valedale",
+  },
+  time: {
+    minutesSeconds: "in {minutes}min {seconds}s",
+    seconds: "in {seconds}s",
+  },
 };

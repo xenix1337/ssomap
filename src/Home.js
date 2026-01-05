@@ -44,14 +44,14 @@ function Home({ data }) {
   const [mousePos, setMousePos] = useState(null);
 
   useEffect(() => {
-    setNextCsInfo(getNextCsInfo());
+    setNextCsInfo(getNextCsInfo(t));
 
     const timer = setInterval(() => {
-      setNextCsInfo(getNextCsInfo());
+      setNextCsInfo(getNextCsInfo(t));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     localStorage.setItem("filters", JSON.stringify(activeFilters));
@@ -119,10 +119,16 @@ function Home({ data }) {
                   {
                     ...csMarkers[nextCsInfo.location],
                     type: "cs",
-                    tooltip:
-                      csMarkers[nextCsInfo.location].name +
-                      ", " +
-                      nextCsInfo.timeLeftString,
+                    tooltip: (() => {
+                      const csKey = nextCsInfo.location;
+                      const translatedCs = t(`championships.${csKey}`);
+                      const csName =
+                        translatedCs === `championships.${csKey}`
+                          ? csMarkers[csKey].name
+                          : translatedCs;
+
+                      return csName + ", " + nextCsInfo.timeLeftString;
+                    })(),
                   },
                 ]
               : []),

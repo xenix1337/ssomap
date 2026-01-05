@@ -1,22 +1,22 @@
 export const csMarkers = {
   moorland: { name: "Moorland", x: 198, y: 246 },
   pinta: { name: "Fort Pinta", x: 246, y: 253 },
-  silversong: { name: "Mistrzostwa kucyków", x: 228, y: 235 },
-  baron: { name: "Mistrzostwa baronowej", x: 144, y: 132 },
-  gold: { name: "Dolina Złotych Wzgórz", x: 96, y: 150 },
-  jorvik: { name: "Stajnia Jorvik", x: 22, y: 229 },
-  silver: { name: "Srebrna Polana", x: 176, y: 186 },
-  grove: { name: "Jodłowy Gaj", x: 326, y: 170 },
-  gran: { name: "Nowa Grań", x: 124, y: 358 },
+  silversong: { name: "Silversong Pony Championship", x: 228, y: 235 },
+  baron: { name: "Baroness' Championship", x: 144, y: 132 },
+  gold: { name: "Goldenhills", x: 96, y: 150 },
+  jorvik: { name: "Jorvik Stables", x: 22, y: 229 },
+  silver: { name: "Silverglade Village", x: 176, y: 186 },
+  grove: { name: "Firgrove", x: 326, y: 170 },
+  gran: { name: "New Hillcrest", x: 124, y: 358 },
   valedale: { name: "Valedale", x: 283, y: 118 },
 };
 
-export function getNextCsInfo() {
+export function getNextCsInfo(t) {
   const timeLeft = getTimeToNextCs();
   return {
     location: schedule[getNextCsIndex()],
     timeLeft: timeLeft,
-    timeLeftString: getTimeLeftString(timeLeft),
+    timeLeftString: getTimeLeftString(timeLeft, t),
   };
 }
 
@@ -46,14 +46,20 @@ function getTimeToNextCs() {
   return 30 * 60 * 1000 - (millisecondsElapsed % (30 * 60 * 1000));
 }
 
-function getTimeLeftString(ms) {
+function getTimeLeftString(ms, t) {
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  if (minutes > 1) {
-    return `za ${minutes}min ${remainingSeconds}s`;
+  if (!t) return "";
+  if (minutes > 0) {
+    return t("time.minutesSeconds", {
+      minutes,
+      seconds: remainingSeconds,
+    });
   } else {
-    return `za ${remainingSeconds}s`;
+    return t("time.seconds", {
+      seconds: remainingSeconds,
+    });
   }
 }
 

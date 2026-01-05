@@ -114,4 +114,20 @@ export const pl = {
     NIC_STONEGROUNDS_CAMP: "Obozowisko Nica Stoneground",
     THE_EVERWIND_FIELDS: "Pola Everwind",
   },
+  championships: {
+    moorland: "Moorland",
+    pinta: "Fort Pinta",
+    silversong: "Mistrzostwa kucyków Silversong",
+    baron: "Mistrzostwa baronowej",
+    gold: "Dolina Złotych Wzgórz",
+    jorvik: "Stajnia Jorvik",
+    silver: "Srebrna Polana",
+    grove: "Jodłowy Gaj",
+    gran: "Nowa Grań",
+    valedale: "Valedale",
+  },
+  time: {
+    minutesSeconds: "za {minutes}min {seconds}s",
+    seconds: "za {seconds}s",
+  },
 };

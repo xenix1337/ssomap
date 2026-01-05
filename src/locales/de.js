@@ -76,4 +76,8 @@ export const de = {
       source: "Quellcode",
     },
   },
+  time: {
+    minutesSeconds: "in {minutes}min {seconds}s",
+    seconds: "in {seconds}s",
+  },
 };
