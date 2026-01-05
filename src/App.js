@@ -31,8 +31,8 @@ function App() {
     <LanguageProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home data={data} />} />
-          <Route path="/guessr" element={<Guessr data={data} />} />
+          <Route path="/" element={<Guessr data={data} />} />
+          <Route path="/map" element={<Home data={data} />} />
         </Routes>
       </Router>
       <ToastContainer

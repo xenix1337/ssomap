@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faMedal } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationDot,
+  faMedal,
+  faExpand,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +21,7 @@ import "./style.css";
 import "./tooltip.css";
 import "./Guessr.css";
 import { calculatePoints } from "./utils/guessr";
+import { isMobileDevice } from "./utils/device";
 
 function Guessr({ data }) {
   const { t } = useLanguage();
@@ -29,13 +35,49 @@ function Guessr({ data }) {
   const [gameState, setGameState] = useState("loading");
   const [points, setPoints] = useState(0);
   const [photoFullscreened, setPhotoFullscreened] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   useEffect(() => {
     if (data && data.length > 0) {
       setPhotos(getRandomPhotos(data, roundCount));
       setGameState("guessing");
+      window.history.pushState({ gameStarted: true }, "");
     }
   }, [data]);
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (photoFullscreened) {
+        setPhotoFullscreened(false);
+        return;
+      }
+
+      if (gameState === "guessing" || gameState === "reviewing") {
+        const confirmLeave = window.confirm(t("guessr.buttons.leaveConfirm"));
+        if (!confirmLeave) {
+          window.history.pushState({ gameStarted: true }, "");
+          setGameState(gameState);
+        } else {
+        }
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [photoFullscreened, gameState, t]);
+
+  const confirmNavigation = () => {
+    if (gameState === "guessing" || gameState === "reviewing") {
+      return window.confirm(t("guessr.buttons.leaveConfirm"));
+    }
+    return true;
+  };
 
   const handleMapClick = ({ x, y }) => {
     if (gameState !== "guessing") return;
@@ -75,7 +117,7 @@ function Guessr({ data }) {
   return (
     <>
       <div id="sidebar">
-        <Navigation />
+        <Navigation onNavigate={confirmNavigation} />
 
         {gameState === "loading" && (
           <div className="loading">{t("guessr.loading")}</div>
@@ -83,27 +125,47 @@ function Guessr({ data }) {
 
         {gameState !== "finished" && gameState !== "loading" ? (
           <>
-            <img
-              className="guessr-photo"
-              alt={t("guessr.alt.locationPhoto")}
-              src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
-              onClick={() => {
-                setPhotoFullscreened(true);
-              }}
-            ></img>
-            {photoFullscreened && (
-              <div
-                id="fullscreen"
-                onClick={() => {
-                  setPhotoFullscreened(false);
-                }}
-              >
+            <>
+              <div className="photo-container">
                 <img
+                  className="guessr-photo"
+                  alt={t("guessr.alt.locationPhoto")}
                   src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
-                  alt={t("guessr.alt.fullscreenPreview")}
+                  onClick={() => {
+                    setPhotoFullscreened(true);
+                    window.history.pushState({ fullscreen: true }, "");
+                  }}
                 ></img>
+                <div className="photo-hint">
+                  <FontAwesomeIcon icon={faExpand} />{" "}
+                  {isMobile
+                    ? t("guessr.alt.tapToEnlarge")
+                    : t("guessr.alt.clickToEnlarge")}
+                </div>
               </div>
-            )}
+              {photoFullscreened && (
+                <div
+                  id="fullscreen"
+                  onClick={() => {
+                    window.history.back();
+                  }}
+                >
+                  <button
+                    className="fullscreen-close-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.history.back();
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                  <img
+                    src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
+                    alt={t("guessr.alt.fullscreenPreview")}
+                  ></img>
+                </div>
+              )}
+            </>
           </>
         ) : gameState === "finished" ? (
           <ResultComment

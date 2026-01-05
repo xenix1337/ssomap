@@ -20,6 +20,7 @@ export const de = {
       guess: "Raten",
       next: "Weiter",
       again: "Noch einmal",
+      leaveConfirm: "Das Spiel läuft noch. Möchtest du es wirklich verlassen?",
     },
     toasts: {
       zeroPoints: "😥 Überhaupt nicht... 0 Punkte",
@@ -30,6 +31,8 @@ export const de = {
     alt: {
       locationPhoto: "Standortfoto, rate wo es aufgenommen wurde",
       fullscreenPreview: "Vollbild-Fotovorschau",
+      clickToEnlarge: "Klicken zum Vergrößern",
+      tapToEnlarge: "Tippen zum Vergrößern",
     },
     result: {
       perfect: [

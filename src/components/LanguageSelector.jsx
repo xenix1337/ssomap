@@ -7,27 +7,15 @@ const LanguageSelector = () => {
 
   return (
     <div className="language-selector">
-      <button
-        className={`lang-btn ${language === "en" ? "active" : ""}`}
-        onClick={() => setLanguage("en")}
-        title="English"
+      <select
+        className="lang-select"
+        value={language}
+        onChange={(e) => setLanguage(e.target.value)}
       >
-        🇺🇸
-      </button>
-      <button
-        className={`lang-btn ${language === "pl" ? "active" : ""}`}
-        onClick={() => setLanguage("pl")}
-        title="Polski"
-      >
-        🇵🇱
-      </button>
-      <button
-        className={`lang-btn ${language === "de" ? "active" : ""}`}
-        onClick={() => setLanguage("de")}
-        title="Deutsch"
-      >
-        🇩🇪
-      </button>
+        <option value="en">🇺🇸 English</option>
+        <option value="pl">🇵🇱 Polski</option>
+        <option value="de">🇩🇪 Deutsch</option>
+      </select>
     </div>
   );
 };

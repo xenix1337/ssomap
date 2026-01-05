@@ -1,6 +1,6 @@
 .guess-button {
   display: block;
-  background-color: #28a745;
+  background-color: #e53bb9;
   color: white;
   font-size: 24px;
   font-weight: bold;
@@ -16,12 +16,12 @@
 }
 
 .guess-button:hover {
-  background-color: #218838;
+  background-color: #f74bc9;
   transform: translateY(-2px);
 }
 
 .guess-button:active {
-  background-color: #1e7e34;
+  background-color: #f74bc9;
   transform: translateY(1px);
 }
 
@@ -128,4 +128,43 @@ h2 {
   .guess-button:hover {
     transform: translateX(-50%) translateY(1px);
   }
+}
+
+.photo-container {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.photo-hint {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.fullscreen-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  color: #333;
+}
+
+.fullscreen-close-btn:hover {
+  background: #f0f0f0;
 }

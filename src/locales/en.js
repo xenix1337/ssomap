@@ -20,6 +20,7 @@ export const en = {
       guess: "Guess",
       next: "Next",
       again: "Play Again",
+      leaveConfirm: "Game is in progress. Are you sure you want to leave?",
     },
     toasts: {
       zeroPoints: "😥 Not quite... 0 points",
@@ -30,6 +31,8 @@ export const en = {
     alt: {
       locationPhoto: "Location photo, guess where it was taken",
       fullscreenPreview: "Fullscreen photo preview",
+      clickToEnlarge: "Click photo to enlarge",
+      tapToEnlarge: "Tap photo to enlarge",
     },
     result: {
       perfect: [
