@@ -71,7 +71,6 @@ function Home({ data }) {
     <>
       <div id="sidebar">
         <Navigation />
-        <LanguageSelector />
         <h2>{t("home.filters")}</h2>
         <h3>{t("home.general")}</h3>
         {filters.map((filter) => (
@@ -88,6 +87,8 @@ function Home({ data }) {
             </label>
           </div>
         ))}
+
+        <LanguageSelector />
         <div id="sidebar-bottom">
           <span>
             {mousePos != null

@@ -29,6 +29,68 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
     );
   };
 
+  const lastTouchRef = useRef({ x: 0, y: 0, distance: 0 });
+
+  const getDistance = (t1, t2) => {
+    return Math.sqrt(
+      Math.pow(t1.clientX - t2.clientX, 2) +
+        Math.pow(t1.clientY - t2.clientY, 2),
+    );
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      lastTouchRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        distance: 0,
+      };
+    } else if (e.touches.length === 2) {
+      const dist = getDistance(e.touches[0], e.touches[1]);
+      lastTouchRef.current = { ...lastTouchRef.current, distance: dist };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.cancelable) e.preventDefault();
+
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      const dx = touch.clientX - lastTouchRef.current.x;
+      const dy = touch.clientY - lastTouchRef.current.y;
+
+      setTranslateX((prev) => Math.min(Math.max(prev - dx / scale, 0), 1024));
+      setTranslateY((prev) => Math.min(Math.max(prev - dy / scale, 0), 1024));
+
+      lastTouchRef.current = {
+        ...lastTouchRef.current,
+        x: touch.clientX,
+        y: touch.clientY,
+      };
+    } else if (e.touches.length === 2) {
+      const dist = getDistance(e.touches[0], e.touches[1]);
+      if (lastTouchRef.current.distance > 0) {
+        const scaleChange = dist / lastTouchRef.current.distance;
+        setScale((prevScale) =>
+          Math.min(Math.max(prevScale * scaleChange, 0.5), 3),
+        );
+      }
+      lastTouchRef.current = { ...lastTouchRef.current, distance: dist };
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      lastTouchRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        distance: 0,
+      };
+    }
+  };
+
   const handleMouseDown = (e) => {
     if (e.button !== 0) return;
     const startX = e.clientX;
@@ -72,6 +134,9 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleContainerMouseMove}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <img
         className="map-tile"

@@ -76,8 +76,6 @@ function Guessr({ data }) {
     <>
       <div id="sidebar">
         <Navigation />
-        <LanguageSelector />
-        <h2>{t("guessr.title")}</h2>
 
         {gameState === "loading" && (
           <div className="loading">{t("guessr.loading")}</div>
@@ -178,6 +176,8 @@ function Guessr({ data }) {
             }[gameState]
           }
         </button>
+
+        <LanguageSelector />
 
         <div id="sidebar-bottom">
           <span>

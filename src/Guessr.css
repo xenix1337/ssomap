@@ -12,7 +12,7 @@
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;
-  margin: auto auto;
+  margin: 20px auto;
 }
 
 .guess-button:hover {
@@ -60,6 +60,14 @@
   max-height: 90%;
 }
 
+@media (orientation: portrait) {
+  #fullscreen img {
+    transform: rotate(90deg);
+    max-width: 85vh;
+    max-height: 85vw;
+  }
+}
+
 .line {
   position: absolute;
   width: 5px;
@@ -98,4 +106,26 @@
 
 h2 {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .guess-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    margin: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .guess-button:disabled {
+    transform: translateX(-50%);
+  }
+
+  .guess-button:active,
+  .guess-button:hover {
+    transform: translateX(-50%) translateY(1px);
+  }
 }

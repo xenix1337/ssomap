@@ -3,6 +3,7 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   background-color: rgb(244, 237, 220);
@@ -12,6 +13,13 @@ body {
   font-family: "Noto Sans", sans-serif;
   overflow: hidden;
 }
+
+#root {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
 #sidebar {
   width: 350px;
   background-color: rgb(56, 34, 21);
@@ -19,22 +27,58 @@ body {
   padding: 10px;
   box-sizing: border-box;
   position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
 #main-pane {
   flex-grow: 1;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   position: relative;
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
 }
+
+@media (max-width: 768px) {
+  #root {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    overflow-y: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  #main-pane {
+    width: 100%;
+    flex-grow: 1;
+    height: auto;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #sidebar {
+    max-height: 100vh;
+  }
+}
+
 #map {
   position: relative;
 }
+
 #map img {
   object-fit: contain;
   max-height: 100vh;
 }
+
 .marker {
   position: absolute;
   width: 22px;
@@ -42,12 +86,15 @@ body {
   background-size: cover;
   transform: translate(-50%, -50%);
 }
+
 .marker.cs {
   background-image: url("img/cs.png");
 }
+
 .marker.fasttravel {
   background-image: url("img/fasttravel.png");
 }
+
 .marker.guessr {
   background-image: url("img/guess.png");
 }
@@ -61,10 +108,10 @@ body {
 .filter-item input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #1e90ff; /* Custom color for the checkbox */
+  accent-color: #1e90ff;
   margin-right: 10px;
   cursor: pointer;
-  transform: scale(1.2); /* Makes the checkbox larger */
+  transform: scale(1.2);
 }
 
 .filter-item input[type="checkbox"]::before {
@@ -72,16 +119,16 @@ body {
   display: block;
   width: 16px;
   height: 16px;
-  border: 2px solid #1e90ff; /* Border color of the checkbox */
+  border: 2px solid #1e90ff;
   border-radius: 4px;
-  background-color: #333; /* Background color of the checkbox when not checked */
+  background-color: #333;
   position: relative;
   top: -1px;
   left: -1px;
 }
 
 .filter-item input[type="checkbox"]:checked::before {
-  background-color: #1e90ff; /* Background color of the checkbox when checked */
+  background-color: #1e90ff;
 }
 
 .filter-item input[type="checkbox"]:checked::after {
@@ -90,7 +137,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #fff; /* Checkmark color */
+  color: #fff;
   font-size: 16px;
 }
 
@@ -108,15 +155,12 @@ body {
 }
 
 #sidebar-bottom {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* background-color: rgb(226, 201, 201); */
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 5px;
   text-align: center;
   box-sizing: content-box;
-  height: 1em;
+  flex-shrink: 0;
+  padding-top: 10px;
 }
 
 .result-comment {
