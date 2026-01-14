@@ -18,6 +18,7 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("app-language", language);
+    document.documentElement.lang = language;
   }, [language]);
 
   const dictionary = language === "pl" ? pl : language === "de" ? de : en;

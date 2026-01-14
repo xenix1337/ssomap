@@ -3,6 +3,6 @@ import App from "./App";
 
 test("renders home page by default", () => {
   render(<App />);
-  const element = screen.getByText(/Filters/i);
+  const element = screen.getByText(/Guess/i);
   expect(element).toBeInTheDocument();
 });
