@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Map.css";
 
 import mapImg from "../img/map.png";
@@ -8,8 +8,40 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
   const [translateX, setTranslateX] = useState(512);
   const [translateY, setTranslateY] = useState(512);
   const mapRef = useRef(null);
+  const containerRef = useRef(null);
 
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState(null);
+
+  useEffect(() => {
+    const handleNativeWheel = (e) => {
+      e.preventDefault();
+
+      if (e.ctrlKey) {
+        const zoomFactor = 0.01;
+        setScale((prevScale) =>
+          Math.min(Math.max(prevScale - e.deltaY * zoomFactor, 0.5), 3),
+        );
+      } else {
+        const scaleChange = e.deltaY > 0 ? 0.9 : 1.1;
+        setScale((prevScale) =>
+          Math.min(Math.max(prevScale * scaleChange, 0.5), 3),
+        );
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleNativeWheel, {
+        passive: false,
+      });
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", handleNativeWheel);
+      }
+    };
+  }, []);
 
   const handleContainerMouseMove = (e) => {
     if (onMouseMove && mapRef.current) {
@@ -19,14 +51,6 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
 
       onMouseMove({ x: Math.round(x), y: Math.round(y) });
     }
-  };
-
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const scaleChange = e.deltaY > 0 ? 0.9 : 1.1;
-    setScale((prevScale) =>
-      Math.min(Math.max(prevScale * scaleChange, 0.5), 3),
-    );
   };
 
   const lastTouchRef = useRef({ x: 0, y: 0, distance: 0 });
@@ -131,7 +155,7 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
   return (
     <div
       className="map-container"
-      onWheel={handleWheel}
+      ref={containerRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleContainerMouseMove}
       onTouchStart={handleTouchStart}
