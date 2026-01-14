@@ -22,6 +22,7 @@ import "./tooltip.css";
 import "./Guessr.css";
 import { calculatePoints } from "./utils/guessr";
 import { isMobileDevice } from "./utils/device";
+import GuessButton from "./components/GuessButton";
 
 function Guessr({ data }) {
   const { t } = useLanguage();
@@ -56,7 +57,10 @@ function Guessr({ data }) {
         return;
       }
 
-      if (gameState === "guessing" || gameState === "reviewing") {
+      if (
+        (gameState === "guessing" || gameState === "reviewing") &&
+        (markers.length > 0 || photoId > 0)
+      ) {
         const confirmLeave = window.confirm(t("guessr.buttons.leaveConfirm"));
         if (!confirmLeave) {
           window.history.pushState({ gameStarted: true }, "");
@@ -73,6 +77,7 @@ function Guessr({ data }) {
   }, [photoFullscreened, gameState, t]);
 
   const confirmNavigation = () => {
+    if (markers.length === 0 && photoId === 0) return true;
     if (gameState === "guessing" || gameState === "reviewing") {
       return window.confirm(t("guessr.buttons.leaveConfirm"));
     }
@@ -114,6 +119,38 @@ function Guessr({ data }) {
     }
   };
 
+  const onGuessButtonClick = () => {
+    if (gameState === "guessing") {
+      addPoints();
+      setGameState("reviewing");
+      setMarkers(
+        markers.concat([
+          {
+            x: (getCurentPhoto().x / 409) * 1024,
+            y: (getCurentPhoto().y / 409) * 1024,
+            type: "guessr",
+          },
+        ]),
+      );
+    } else if (gameState === "reviewing") {
+      setGameState("guessing");
+      setMarkers([]);
+      setGuessMarker(null);
+      if (photoId + 1 < roundCount) {
+        setPhotoId((prevPhotoId) => prevPhotoId + 1);
+      } else {
+        setGameState("finished");
+      }
+    } else if (gameState === "finished") {
+      setPhotos(getRandomPhotos(data, roundCount));
+      setGameState("guessing");
+      setMarkers([]);
+      setGuessMarker(null);
+      setPhotoId(0);
+      setPoints(0);
+    }
+  };
+
   return (
     <>
       <div id="sidebar">
@@ -143,28 +180,6 @@ function Guessr({ data }) {
                     : t("guessr.alt.clickToEnlarge")}
                 </div>
               </div>
-              {photoFullscreened && (
-                <div
-                  id="fullscreen"
-                  onClick={() => {
-                    window.history.back();
-                  }}
-                >
-                  <button
-                    className="fullscreen-close-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.history.back();
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </button>
-                  <img
-                    src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
-                    alt={t("guessr.alt.fullscreenPreview")}
-                  ></img>
-                </div>
-              )}
             </>
           </>
         ) : gameState === "finished" ? (
@@ -191,53 +206,16 @@ function Guessr({ data }) {
           </div>
         </div>
 
-        <button
-          className="guess-button"
+        <GuessButton
+          className="desktop-only"
+          gameState={gameState}
           disabled={
             (guessMarker === null && gameState !== "finished") ||
             gameState === "loading"
           }
-          onClick={() => {
-            if (gameState === "guessing") {
-              addPoints();
-              setGameState("reviewing");
-              setMarkers(
-                markers.concat([
-                  {
-                    x: (getCurentPhoto().x / 409) * 1024,
-                    y: (getCurentPhoto().y / 409) * 1024,
-                    type: "guessr",
-                  },
-                ]),
-              );
-            } else if (gameState === "reviewing") {
-              setGameState("guessing");
-              setMarkers([]);
-              setGuessMarker(null);
-              if (photoId + 1 < roundCount) {
-                setPhotoId((prevPhotoId) => prevPhotoId + 1);
-              } else {
-                setGameState("finished");
-              }
-            } else if (gameState === "finished") {
-              setPhotos(getRandomPhotos(data, roundCount));
-              setGameState("guessing");
-              setMarkers([]);
-              setGuessMarker(null);
-              setPhotoId(0);
-              setPoints(0);
-            }
-          }}
-        >
-          {
-            {
-              loading: t("guessr.loading"),
-              guessing: t("guessr.buttons.guess"),
-              reviewing: t("guessr.buttons.next"),
-              finished: t("guessr.buttons.again"),
-            }[gameState]
-          }
-        </button>
+          onClick={onGuessButtonClick}
+          t={t}
+        />
 
         <LanguageSelector />
 
@@ -270,6 +248,40 @@ function Guessr({ data }) {
           onMapClick={handleMapClick}
         />
       </div>
+
+      <GuessButton
+        className="mobile-only"
+        gameState={gameState}
+        disabled={
+          (guessMarker === null && gameState !== "finished") ||
+          gameState === "loading"
+        }
+        onClick={onGuessButtonClick}
+        t={t}
+      />
+
+      {photoFullscreened && (
+        <div
+          id="fullscreen"
+          onClick={() => {
+            window.history.back();
+          }}
+        >
+          <button
+            className="fullscreen-close-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.history.back();
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <img
+            src={`${process.env.REACT_APP_BASE_STATIC_URL}/${getCurentPhoto().url}`}
+            alt={t("guessr.alt.fullscreenPreview")}
+          ></img>
+        </div>
+      )}
     </>
   );
 }
