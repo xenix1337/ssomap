@@ -74,7 +74,7 @@ function Guessr({ data }) {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [photoFullscreened, gameState, t]);
+  }, [photoFullscreened, gameState, t, markers.length, photoId]);
 
   const confirmNavigation = () => {
     if (markers.length === 0 && photoId === 0) return true;
