@@ -208,7 +208,7 @@ const Map = ({ markers, lines, onMapClick, onMouseMove }) => {
           style={{
             top: `50%`,
             left: `50%`,
-            transform: `translate(-50%, -50%) scale(${scale}) translate(${
+            transform: `translate(-50%, -100%) scale(${scale}) translate(${
               marker.x - translateX
             }px, ${marker.y - translateY}px) scale(${1 / scale})`,
             cursor: marker.image ? "pointer" : "inherit",
